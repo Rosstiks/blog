@@ -1,0 +1,36 @@
+.container {
+  width: 500px;
+  margin: 30px auto;
+  padding: 30px 60px;
+  background: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  height: 70px;
+  margin-right: 40px;
+}
+
+.buttonStartPage {
+  font-size: 1.2rem;
+  color: #1890ff;
+  text-decoration: none;
+  text-align: center;
+
+  display: block;
+  box-sizing: border-box;
+  padding: 8px 20px;
+  border: 1px solid #1890ff;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.buttonStartPage:hover {
+  color: #ffffff;
+  background: #1890ff;
+}

@@ -1,0 +1,83 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content {
+  width: 75%;
+}
+
+.topAreaContent {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.67rem;
+  line-height: 1.4;
+  font-weight: 400;
+  color: #1890ff;
+  margin: 0 13px 0 0;
+}
+
+.titleLink {
+  text-decoration: none;
+}
+
+.buttonLike {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+.tagsContainer {
+  margin-top: 4px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 5px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 8px;
+}
+
+.tag:first-child {
+  color: #000000;
+  border-color: #000000;
+}
+
+.description {
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin: 7px 0;
+}
+
+.infoContainer {
+  display: flex;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 1rem;
+}
+
+.infoName {
+  font-size: 1.5rem;
+  line-height: 1.56em;
+}
+
+.infoDate {
+  line-height: 1em;
+  color: rgba(0, 0, 0, 0.5);
+}

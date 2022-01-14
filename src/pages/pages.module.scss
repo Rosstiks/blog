@@ -1,0 +1,77 @@
+%container {
+  box-sizing: border-box;
+  max-width: 941px;
+  background: #ffffff;
+  border-radius: 5px;
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+  margin: 24px auto;
+}
+
+.authFormContainer {
+  @extend %container;
+  max-width: 384px;
+  padding: 48px 32px;
+  border-radius: 5px;
+  margin-bottom: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.articleContainer {
+  @extend %container;
+  min-height: calc(100vh - 128px);
+  padding: 15px 14px 15px 19px;
+}
+
+.editArticleContainer {
+  @extend %container;
+  padding: 48px 32px;
+}
+
+.itemContainer {
+  @extend %container;
+  padding: 15px 14px 15px 19px;
+  margin-top: 0;
+}
+
+.paginationContainer {
+  padding-bottom: 26px;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 21px;
+  font-size: 1.67em;
+  text-align: center;
+}
+
+.itemList {
+  margin: 0;
+  padding: 26px 0 0 0;
+  list-style: none;
+}
+
+.articlesBody {
+  font-size: 1.5rem;
+  line-height: 1.4em;
+}
+
+.redirectBlock {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.67em;
+  color: #8c8c8c;
+  text-align: center;
+  display: block;
+  margin: 0.67rem;
+}
+
+.redirectLink {
+  margin-left: 0.2rem;
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.67em;
+  text-decoration: none;
+}
+
+.redirectLink:focus,
+.redirectLink:hover {
+  text-decoration: underline;
+}
