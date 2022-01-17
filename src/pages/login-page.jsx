@@ -1,44 +1,52 @@
-import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classes from './pages.module.scss';
-import ApiService from '../services/api-service';
 import LoginForm from '../components/auth-forms/login-form';
 import Alert from '../components/alert';
+import { ApiServiceContext, UserContext } from '../context';
 
-function LoginPage({ setAuthToken, token }) {
-  const navigate = useNavigate();
-  const apiService = new ApiService();
-  const [error, setError] = useState({ server: false, network: false });
+function LoginPage({ onLogin }) {
+  const apiService = useContext(ApiServiceContext);
+  const user = useContext(UserContext);
+  const initialStatusState = {
+    errors: {
+      server: false,
+      network: false,
+    },
+    loading: false,
+    completed: false,
+  };
+  const [status, setStatus] = useState(initialStatusState);
 
   const onSubmit = (user) => {
+    setStatus({ ...initialStatusState, loading: true });
     apiService
       .loginUser(user)
       .then((data) => {
         const { result } = data;
         if (!data.ok) {
-          setError({ server: true, network: false });
+          setStatus({ ...initialStatusState, errors: { server: true, network: false } });
           return;
         }
-        setAuthToken(result.user.token);
-        localStorage.setItem('token', result.user.token);
-        navigate('/articles', { replace: true });
+        onLogin(result.user.token);
+        setStatus({ ...initialStatusState, completed: true });
       })
-      .catch(() => setError({ server: false, network: true }));
+      .catch(() => setStatus({ ...initialStatusState, errors: { server: false, network: true } }));
   };
 
   const clearAuthError = () => {
-    if (error.server) setError({ server: false, network: false });
+    if (status.errors.server) setStatus(initialStatusState);
   };
 
-  if (token) return <Navigate to="/articles" replace />;
-
-  if (error.network) return <Alert type="error" />;
+  if (user.token && !status.completed) return <Navigate to="/articles" replace />;
+  if (status.errors.network) return <Alert type="error" />;
+  if (status.completed) return <Alert type="Login" />;
 
   return (
     <div className={classes.authFormContainer}>
       <h2 className={classes.title}>Sign In</h2>
-      <LoginForm onSubmit={onSubmit} authError={error.server} clearAuthError={clearAuthError} />
+      <LoginForm onSubmit={onSubmit} authError={status.errors.server} clearAuthError={clearAuthError} />
       <span className={classes.redirectBlock}>
         Don’t have an account?
         <Link className={classes.redirectLink} to="/sign-up">
@@ -49,13 +57,8 @@ function LoginPage({ setAuthToken, token }) {
   );
 }
 
-LoginPage.defaultProps = {
-  token: null,
-};
-
 LoginPage.propTypes = {
-  setAuthToken: PropTypes.func.isRequired,
-  token: PropTypes.string,
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default LoginPage;

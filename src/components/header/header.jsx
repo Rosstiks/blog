@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classes from './header.module.css';
+import classes from './header.module.scss';
 import defaultAvatar from './testAvatar.png';
-import useUserInfo from '../../hooks/useUserInfo';
+import { UserContext } from '../../context';
 
-function Header({ authToken, setAuthToken }) {
-  const user = useUserInfo(authToken);
+function Header({ onLogOut }) {
+  const user = useContext(UserContext);
 
   const avatarURL = user.image ? user.image : defaultAvatar;
   const authButtons = (
@@ -16,16 +16,9 @@ function Header({ authToken, setAuthToken }) {
       </Link>
       <Link to="/profile" className={classes.buttonProfile}>
         <span className={classes.username}>{user.username}</span>
-        <img height="46px" src={avatarURL} alt="avatar" />
+        <img className={classes.avatar} src={avatarURL} alt="avatar" />
       </Link>
-      <button
-        onClick={() => {
-          localStorage.removeItem('token');
-          setAuthToken(null);
-        }}
-        className={classes.buttonLogOut}
-        type="button"
-      >
+      <button onClick={onLogOut} className={classes.buttonLogOut} type="button">
         Log Out
       </button>
     </>
@@ -33,15 +26,15 @@ function Header({ authToken, setAuthToken }) {
 
   const nonAuthButtons = (
     <>
-      <Link to="/sign-in" className={classes.buttonAuth} type="button">
+      <Link to="/sign-in" className={classes.buttonSignIn} type="button">
         Sign In
       </Link>
-      <Link to="/sign-up" className={`${classes.buttonAuth} ${classes.buttonAuthUp}`} type="button">
+      <Link to="/sign-up" className={classes.buttonSignUp} type="button">
         Sign Up
       </Link>
     </>
   );
-  const buttons = authToken ? authButtons : nonAuthButtons;
+  const buttons = user.token ? authButtons : nonAuthButtons;
 
   return (
     <header className={classes.header}>
@@ -55,13 +48,8 @@ function Header({ authToken, setAuthToken }) {
   );
 }
 
-Header.defaultProps = {
-  authToken: null,
-};
-
 Header.propTypes = {
-  authToken: PropTypes.string,
-  setAuthToken: PropTypes.func.isRequired,
+  onLogOut: PropTypes.func.isRequired,
 };
 
 export default Header;

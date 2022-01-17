@@ -1,14 +1,28 @@
 export default class ApiService {
-  _apiBase = 'https://kata.academy:8022/api';
+  _apiBase = 'https://kata.academy:8021/api';
 
-  getArticlesGlobally = async (page) => {
-    const response = await fetch(`${this._apiBase}/articles?limit=5&offset=${(page - 1) * 5}`);
+  getArticlesGlobally = async (page, token) => {
+    const params = token
+      ? {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      : null;
+    const response = await fetch(`${this._apiBase}/articles?limit=5&offset=${(page - 1) * 5}`, params);
     const data = await response.json();
     return data;
   };
 
-  getArticle = async (slug) => {
-    const response = await fetch(`${this._apiBase}/articles/${slug}`);
+  getArticle = async (slug, user) => {
+    const params = user
+      ? {
+          headers: {
+            Authorization: `Token ${user.token}`,
+          },
+        }
+      : null;
+    const response = await fetch(`${this._apiBase}/articles/${slug}`, params);
     const data = await response.json();
     return data;
   };
@@ -84,5 +98,25 @@ export default class ApiService {
     });
     const result = await response.json();
     return result;
+  };
+
+  deletePost = async (slug, token) => {
+    const response = await fetch(`${this._apiBase}/articles/${slug}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response;
+  };
+
+  changeFavoritePost = async (slug, token, type) => {
+    const response = await fetch(`${this._apiBase}/articles/${slug}/favorite`, {
+      method: type,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response;
   };
 }

@@ -1,31 +1,31 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Pagination } from 'antd';
-import ApiService from '../services/api-service';
 import Item from '../components/item';
 import LoadSpinner from '../components/load-spinner';
 import Alert from '../components/alert';
 import classes from './pages.module.scss';
+import { ApiServiceContext, UserContext } from '../context';
 
 function StartPage() {
-  const apiService = useMemo(() => new ApiService(), []);
+  const apiService = useContext(ApiServiceContext);
+  const user = useContext(UserContext);
   const [articles, setArticles] = useState([]);
   const [stateRequest, setStateRequest] = useState({ loading: true, error: false });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalArticles, setTotalArticles] = useState(0);
 
   const getArticles = useCallback(() => {
-    setStateRequest({ loading: true, error: false });
     apiService
-      .getArticlesGlobally(currentPage)
+      .getArticlesGlobally(currentPage, user.token)
       .then((data) => {
         setArticles(data.articles);
         setTotalArticles(data.articlesCount);
         setStateRequest({ loading: false, error: false });
       })
       .catch(() => setStateRequest({ loading: false, error: true }));
-  }, [currentPage, apiService]);
+  }, [apiService, currentPage, user]);
 
-  useEffect(() => getArticles(), [getArticles]);
+  useEffect(getArticles, [getArticles]);
 
   const onPageChange = (page) => {
     window.scroll(0, 0);

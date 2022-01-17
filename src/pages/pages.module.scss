@@ -7,6 +7,16 @@
   margin: 24px auto;
 }
 
+.notFoundContainer {
+  @extend %container;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  max-width: 500px;
+  margin-top: 21px;
+  padding: 24px 36px;
+}
+
 .authFormContainer {
   @extend %container;
   max-width: 384px;
@@ -74,4 +84,15 @@
 .redirectLink:focus,
 .redirectLink:hover {
   text-decoration: underline;
+}
+
+.notFoundStatus {
+  font-size: 4rem;
+  line-height: 1em;
+  margin-bottom: 0;
+  color: #f5222d;
+}
+
+.notFoundDescription {
+  margin-bottom: 0;
 }

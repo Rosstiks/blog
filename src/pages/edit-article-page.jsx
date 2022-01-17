@@ -1,16 +1,16 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import classes from './pages.module.scss';
-import ApiService from '../services/api-service';
 import ArticleForm from '../components/article-form/article-form';
 import LoadSpinner from '../components/load-spinner';
 import Alert from '../components/alert';
+import { ApiServiceContext, UserContext } from '../context';
 
-const EditArticlePage = ({ token }) => {
+const EditArticlePage = () => {
+  const user = useContext(UserContext);
+  const apiService = useContext(ApiServiceContext);
   const [status, setStatus] = useState({ loading: true, error: false, completed: false });
   const [article, setArticle] = useState({});
-  const apiService = useMemo(() => new ApiService(), []);
   const location = useLocation();
   const { slug } = location.state;
 
@@ -29,7 +29,7 @@ const EditArticlePage = ({ token }) => {
     const { tagList } = data;
     const responseData = { article: { ...data, tagList: tagList.map((el) => el.tag) } };
     apiService
-      .updatePost(responseData, token, slug)
+      .updatePost(responseData, user.token, slug)
       .then(() => setStatus({ loading: false, error: false, completed: true }))
       .catch(() => setStatus({ loading: false, error: true, completed: false }));
   };
@@ -44,14 +44,6 @@ const EditArticlePage = ({ token }) => {
       <ArticleForm onSubmit={onSubmit} article={article} />
     </div>
   );
-};
-
-EditArticlePage.defaultProps = {
-  token: null,
-};
-
-EditArticlePage.propTypes = {
-  token: PropTypes.string,
 };
 
 export default EditArticlePage;

@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from 'react';
 import classes from './pages.module.scss';
-import ApiService from '../services/api-service';
 import ArticleForm from '../components/article-form/article-form';
 import LoadSpinner from '../components/load-spinner';
 import Alert from '../components/alert';
+import { ApiServiceContext, UserContext } from '../context';
 
-const NewArticlePage = ({ token }) => {
+const NewArticlePage = () => {
+  const user = useContext(UserContext);
+  const apiService = useContext(ApiServiceContext);
   const [status, setStatus] = useState({ loading: false, error: false, completed: false });
-  const apiService = new ApiService();
 
   const onSubmit = (data) => {
     setStatus({ loading: true, error: false, completed: false });
     const { tagList } = data;
     const responseData = { article: { ...data, tagList: tagList.map((el) => el.tag) } };
     apiService
-      .createPost(responseData, token)
+      .createPost(responseData, user.token)
       .then(() => setStatus({ loading: false, error: false, completed: true }))
       .catch(() => setStatus({ loading: false, error: true, completed: false }));
   };
@@ -30,14 +30,6 @@ const NewArticlePage = ({ token }) => {
       <ArticleForm onSubmit={onSubmit} />
     </div>
   );
-};
-
-NewArticlePage.defaultProps = {
-  token: null,
-};
-
-NewArticlePage.propTypes = {
-  token: PropTypes.string,
 };
 
 export default NewArticlePage;

@@ -1,61 +1,64 @@
-import React, { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classes from './pages.module.scss';
 import ProfileForm from '../components/auth-forms/profile-form';
 import Alert from '../components/alert';
-import ApiService from '../services/api-service';
+import { ApiServiceContext, UserContext } from '../context';
 
-function ProfileEditPage({ token, setAuthToken }) {
-  const navigate = useNavigate();
-  const apiService = new ApiService();
-  const [error, setError] = useState({ server: {}, network: false });
-
-  if (!token) {
-    return <Navigate to="/articles" replace />;
-  }
+function ProfileEditPage({ updateInfo }) {
+  const apiService = useContext(ApiServiceContext);
+  const user = useContext(UserContext);
+  const initialStatusState = {
+    errors: {
+      server: {},
+      network: false,
+    },
+    loading: false,
+    completed: false,
+  };
+  const [status, setStatus] = useState(initialStatusState);
 
   const onSubmit = (userInfo) => {
+    setStatus({ ...initialStatusState, loading: true });
     apiService
-      .updateUserInfo(userInfo, token)
+      .updateUserInfo(userInfo, user.token)
       .then((data) => {
         const { result } = data;
         if (!data.ok) {
-          setError({ network: false, server: result.errors });
+          setStatus({ ...initialStatusState, errors: { network: false, server: result.errors } });
           return;
         }
-        setAuthToken(result.user.token);
-        navigate('/articles', { replace: true });
+        updateInfo(result.user.token);
+        setStatus({ ...initialStatusState, completed: true });
       })
-      .catch(() => setError({ server: {}, network: true }));
+      .catch(() => setStatus({ ...initialStatusState, errors: { network: true, server: {} } }));
   };
 
   const clearDataError = (field) => {
-    setError((prev) => ({
-      network: false,
-      server: { ...prev.server, [field]: null },
+    setStatus((prev) => ({
+      ...initialStatusState,
+      errors: {
+        network: false,
+        server: { ...prev.server, [field]: null },
+      },
     }));
   };
 
-  if (error.network) {
-    return <Alert type="error" />;
-  }
+  if (!user.token) return <Navigate to="/articles" replace />;
+  if (status.errors.network) return <Alert type="error" />;
+  if (status.completed) return <Alert type="Update user info" />;
 
   return (
     <div className={classes.authFormContainer}>
       <h2 className={classes.title}>Edit Profile</h2>
-      <ProfileForm onSubmit={onSubmit} dataError={error.server} clearDataError={clearDataError} />
+      <ProfileForm onSubmit={onSubmit} dataError={status.errors.server} clearDataError={clearDataError} />
     </div>
   );
 }
 
-ProfileEditPage.defaultProps = {
-  token: null,
-};
-
 ProfileEditPage.propTypes = {
-  token: PropTypes.string,
-  setAuthToken: PropTypes.func.isRequired,
+  updateInfo: PropTypes.func.isRequired,
 };
 
 export default ProfileEditPage;

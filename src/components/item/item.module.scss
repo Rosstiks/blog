@@ -52,13 +52,22 @@
   border-color: #000000;
 }
 
-.description {
+%description {
   font-style: normal;
   font-weight: 400;
   line-height: 22px;
   letter-spacing: 0px;
   text-align: left;
   margin: 7px 0;
+}
+
+.descriptionOnList {
+  @extend %description;
+}
+
+.descriptionOnItem {
+  @extend %description;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .infoContainer {

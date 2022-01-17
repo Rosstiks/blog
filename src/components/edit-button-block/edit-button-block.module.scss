@@ -89,3 +89,48 @@
     background-size: contain;
   }
 }
+
+.modalButtonsContainer {
+  display: flex;
+}
+
+%modalButtons {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 22px;
+  color: #595959;
+
+  box-sizing: border-box;
+  padding: 1px 8px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background: #52c41a;
+    border-color: #52c41a;
+    color: #ffffff;
+  }
+}
+
+.buttonConfirm {
+  @extend %modalButtons;
+  border: none;
+  background: #1890ff;
+  color: #ffffff;
+
+  &:hover {
+    border-color: #f5222d;
+    background: #f5222d;
+  }
+}
+
+.buttonDecline {
+  @extend %modalButtons;
+  margin-left: auto;
+  margin-right: 8px;
+}
