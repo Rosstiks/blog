@@ -34,3 +34,8 @@
   color: #ffffff;
   background: #1890ff;
 }
+
+.redirectMessage {
+  color: gray;
+  font-style: italic;
+}

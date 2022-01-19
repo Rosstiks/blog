@@ -32,7 +32,7 @@ function PostPage() {
   }, [apiService, slug, user.token]);
 
   if (status.loading) return <LoadSpinner />;
-  if (status.error) return <Alert type="error" />;
+  if (status.error) return <Alert type="anyError" />;
   if (status.deleted) return <Alert type="Post deleted" />;
 
   return (

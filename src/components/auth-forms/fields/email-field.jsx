@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes, { string } from 'prop-types';
 import classes from '../forms.module.css';
 
-function EmailField({ register, serverError, validationErrors, clearServerError }) {
+function EmailField({ register, serverError, validationErrors, clearServerError, defaultValue }) {
   const email = register('email');
   const serverErrorMessage = serverError.email ? (
     <p className={classes.validationMessage}>This email {serverError.email}</p>
@@ -14,6 +14,7 @@ function EmailField({ register, serverError, validationErrors, clearServerError 
       {validationErrors.email && <p className={classes.validationMessage}>Input correctly E-mail adress.</p>}
       <input
         className={classes.textInput}
+        defaultValue={defaultValue}
         type="text"
         placeholder="Email address"
         {...register('email', {
@@ -35,6 +36,7 @@ EmailField.defaultProps = {
   serverError: {},
   clearServerError: () => {},
   validationErrors: {},
+  defaultValue: null,
 };
 
 EmailField.propTypes = {
@@ -42,6 +44,7 @@ EmailField.propTypes = {
   serverError: PropTypes.objectOf(string),
   validationErrors: PropTypes.object,
   clearServerError: PropTypes.func,
+  defaultValue: PropTypes.string,
 };
 
 export default EmailField;

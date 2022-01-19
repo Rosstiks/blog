@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes, { object } from 'prop-types';
 import classes from './forms.module.css';
@@ -7,8 +7,10 @@ import EmailField from './fields/email-field';
 import PasswordField from './fields/password-field';
 import SubmitButton from './fields/submit-button';
 import AvatarURLField from './fields/avatar-url-field';
+import { UserContext } from '../../context';
 
 function ProfileForm({ onSubmit, dataError, clearDataError }) {
+  const user = useContext(UserContext);
   const {
     register,
     formState: { errors },
@@ -23,8 +25,8 @@ function ProfileForm({ onSubmit, dataError, clearDataError }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-      <UsernameField {...fieldProps} />
-      <EmailField {...fieldProps} />
+      <UsernameField {...fieldProps} defaultValue={user.username} />
+      <EmailField {...fieldProps} defaultValue={user.email} />
       <PasswordField {...fieldProps} />
       <AvatarURLField {...fieldProps} />
       <SubmitButton text="Save" />

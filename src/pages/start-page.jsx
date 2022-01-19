@@ -40,7 +40,7 @@ function StartPage() {
 
   if (stateRequest.loading) return <LoadSpinner />;
 
-  if (stateRequest.error) return <Alert type="error" />;
+  if (stateRequest.error) return <Alert type="anyError" />;
 
   return (
     <>

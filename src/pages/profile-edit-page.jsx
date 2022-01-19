@@ -46,7 +46,7 @@ function ProfileEditPage({ updateInfo }) {
   };
 
   if (!user.token) return <Navigate to="/articles" replace />;
-  if (status.errors.network) return <Alert type="error" />;
+  if (status.errors.network) return <Alert type="anyError" />;
   if (status.completed) return <Alert type="Update user info" />;
 
   return (
